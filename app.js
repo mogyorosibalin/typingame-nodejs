@@ -1,0 +1,28 @@
+require('./config/config');
+// require('./init/init');
+
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const { mongoose } = require('./db/mongoose');
+
+const { userRouter } = require('./router/users');
+const { productTypeRouter } = require('./router/product-type');
+const { productRouter } = require('./router/product');
+const { textRouter } = require('./router/text');
+const { typingResultRouter } = require('./router/typing-result');
+
+const app = express();
+app.use(bodyParser.json());
+app.use(cors({ origin: 'http://localhost:4200' }));
+
+app.use(userRouter);
+app.use(productTypeRouter);
+app.use(productRouter);
+app.use(textRouter);
+app.use(typingResultRouter);
+
+app.listen(3000, () => {
+    console.log('Server started on port 3000');
+});
