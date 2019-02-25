@@ -7,9 +7,7 @@ const productTypeRouter = express.Router();
 productTypeRouter.get('/product-types', (req, res) => {
     ProductType
         .find()
-        .then((productTypes) => {
-            res.status(200).send({ productTypes });
-        })
+        .then(productTypes => res.status(200).send(productTypes))
         .catch(err => res.status(400).send(err));
 });
 
@@ -21,8 +19,10 @@ productTypeRouter.get('/product-types/:id', (req, res) => {
             if (!productType) return res.status(404).send(`No product-type found with this id: ${_id}`);
             Product
                 .find({ _productTypeId: productType._id })
-                .then((products) => {
-                    res.status(200).send({ productType, products });
+                .populate('productType')
+                .exec((err, products) => {
+                    if (err) res.status(400).send(err);
+                    else res.status(200).send(products);
                 });
         })
         .catch(err => res.status(400).send(err));
