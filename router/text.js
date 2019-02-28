@@ -42,7 +42,26 @@ textRouter.get('/texts/:id', (req, res) => {
         .catch(err => res.status(400).send(err));
 });
 
-textRouter.post('/texts', (req, res) => {});
+textRouter.post('/texts', (req, res) => {
+    const product = req.body.productId;
+    const text = req.body.text;
+    new Text({ text, product })
+        .save()
+        .then((text) => {
+            text
+                .populate({
+                    path: 'product',
+                    model: 'Product',
+                    populate: {
+                        path: 'productType',
+                        model: 'ProductType'
+                    }
+                }, (err, newText) => {
+                    if (err) res.status(400).send(err);
+                    else res.status(200).send(newText); 
+                });
+        });
+});
 
 textRouter.put('/texts', (req, res) => {});
 
