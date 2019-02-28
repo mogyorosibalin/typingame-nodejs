@@ -17,7 +17,7 @@ const { typingResultRouter } = require('./router/typing-result');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = require('./socket/game').listen(server);
 app.use(bodyParser.json());
 app.use(cors({ origin: 'http://localhost:4200' }));
 
